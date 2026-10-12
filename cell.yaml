@@ -1,0 +1,69 @@
+# Liabilities cell: one of the ten finance services split from the retired finance_* tables (2026-10-12).
+# Loans, credit, payables and other money owed (account_id from finance-accounts).
+# Amounts are real (float) like every kit cell; cross-cell ids (account_id, ...) are plain bigints, not foreign keys.
+cell: liabilities
+title: Liabilities
+resources:
+  liability:
+    filters:
+    - liability_type
+    - owner_scope
+    - status
+    fields:
+      name:
+        type: text
+        required: true
+        max_length: 200
+      liability_type:
+        type: enum
+        values:
+        - loan
+        - credit
+        - tax
+        - payable
+        - subscription
+        - other
+        required: true
+      owner_scope:
+        type: enum
+        values:
+        - personal
+        - solo_empire
+        - venture
+        - client
+        - shared
+        default: personal
+      account_id:
+        type: bigint
+      principal_amount:
+        type: real
+        min: 0
+      outstanding_amount:
+        type: real
+        min: 0
+      minimum_payment:
+        type: real
+        min: 0
+      interest_rate_percent:
+        type: real
+        min: 0
+      currency:
+        type: text
+        default: THB
+        max_length: 12
+      due_date:
+        type: date
+      status:
+        type: enum
+        values:
+        - planned
+        - active
+        - overdue
+        - settled
+        - cancelled
+        default: active
+      metadata:
+        type: json
+        json: object
+      notes:
+        type: text
