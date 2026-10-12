@@ -19,7 +19,7 @@ Every resource has list, stats, get, get-by-legacy-id, create, patch and delete
 
 | Path | Resource | Filters |
 |---|---|---|
-| `/v1/liabilitys` | liability | `liability_type`, `owner_scope`, `status` |
+| `/v1/liabilities` | liability | `liability_type`, `owner_scope`, `status` |
 
 ## Develop and operate
 
