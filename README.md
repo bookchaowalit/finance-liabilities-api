@@ -1,5 +1,4 @@
-# liabilities
-
+# finance-liabilities-api
 The Liabilities cell: its own API (Railway, serverless) and its own Neon
 database, first generated from `cell.yaml` (one of the ten finance
 services split on 2026-10-12). It
@@ -8,8 +7,8 @@ HTTP with the caller's token.
 
 | | |
 |---|---|
-| API | Railway project `liabilities`, service `liabilities-api` (Serverless) |
-| Data | Neon project `liabilities`, database `liabilities` |
+| API | Railway project `finance-liabilities-api`, service `liabilities-api` (Serverless) |
+| Data | Neon project `finance-liabilities-api`, database `liabilities` |
 | Registry | solo-empire `repository-catalog/registries/online-systems.yaml` (`liabilities`) |
 
 ## API
