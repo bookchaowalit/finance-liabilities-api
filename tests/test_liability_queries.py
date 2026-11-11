@@ -81,7 +81,7 @@ def test_paying_down_a_liability_bumps_its_version(client, owner):
     paid = client.patch(
         f"{LIABILITIES}/{liability['id']}",
         headers=owner,
-        json={"outstanding_amount": 750},
+        json={"outstanding_amount": 750, "expected_version": 1},
     )
     assert paid.status_code == 200, paid.text
     assert paid.json()["outstanding_amount"] == "750.0000"
@@ -95,7 +95,7 @@ def test_settling_a_liability_keeps_its_history(client, owner):
     settled = client.patch(
         f"{LIABILITIES}/{liability['id']}",
         headers=owner,
-        json={"status": "settled", "outstanding_amount": 0},
+        json={"status": "settled", "outstanding_amount": 0, "expected_version": 1},
     )
     assert settled.status_code == 200, settled.text
     assert settled.json()["status"] == "settled"
@@ -110,7 +110,12 @@ def test_a_patch_that_changes_nothing_keeps_the_version(client, owner):
     same = client.patch(
         f"{LIABILITIES}/{liability['id']}",
         headers=owner,
-        json={"name": "Stable", "metadata": {"a": 1}, "minimum_payment": 10},
+        json={
+            "name": "Stable",
+            "metadata": {"a": 1},
+            "minimum_payment": 10,
+            "expected_version": 1,
+        },
     )
     assert same.status_code == 200, same.text
     assert same.json()["version"] == 1
