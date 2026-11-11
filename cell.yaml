@@ -5,6 +5,8 @@ cell: liabilities
 title: Liabilities
 resources:
   liability:
+    legacy_columns:
+      scope: owner_scope
     table: liabilities
     plural: liabilities
     filters:
