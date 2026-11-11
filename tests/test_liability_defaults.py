@@ -43,7 +43,8 @@ def test_amounts_keep_their_decimal_value(client, owner):
     assert liability["interest_rate_percent"] == "6.7500000000"
 
 
-def test_account_id_is_a_plain_number_not_a_checked_reference(client, owner):
+def test_account_id_round_trips_when_the_reference_is_trusted(client, owner):
+    # The harness trusts cross-service ids; SPEC-006 checks are in tests/test_cross_references.py.
     liability = create(client, owner, name="Paid from", account_id=424242)
     assert liability.status_code == 201, liability.text
     assert liability.json()["account_id"] == 424242
