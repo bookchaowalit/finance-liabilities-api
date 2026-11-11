@@ -21,8 +21,8 @@ api
 ## Product Purpose
 
 The list of money owed: loans, credit, tax, payables, subscriptions and other liabilities, each
-with principal, outstanding amount, minimum payment, interest rate, due date and status, per owner
-scope. `account_id` can name the account in `finance-accounts-api` the liability is paid from.
+with principal, outstanding amount, minimum payment, interest rate, due date and status, per scope
+label. `account_id` can name the account in `finance-accounts-api` the liability is paid from.
 
 Success: every debt the owner carries exists once with a current outstanding amount, and anything
 past due is marked overdue so the dashboard shows it.
@@ -44,14 +44,18 @@ workspace-scoped, so the same service can serve other tenants without code chang
 
 ## Capabilities and Constraints
 
-- `/v1/liabilities`: list (filters `liability_type`, `owner_scope`, `status`, repeatable for
+- SPEC-003: amounts are exact `money` (`numeric(19,4)`) and quantities, unit prices and rates are
+  `decimal` (`numeric(30,10)`); both are JSON strings in responses (`"1234.5600"`). Currency fields
+  are ISO 4217 codes (three upper-case letters). `scope` is a free label the workspace defines (at
+  most 64 characters, default empty).
+- `/v1/liabilities`: list (filters `liability_type`, `scope`, `status`, repeatable for
   any-of; ordered by id), stats (grouped by one of those filters), get, get-by-legacy-id, create
   (with `Idempotency-Key`), patch (with `expected_version`), delete.
 - Rules: `name` (at most 200 characters) and `liability_type` are required; `liability_type` is
   one of loan, credit, tax, payable, subscription, other; `status` is one of planned, active
-  (default), overdue, settled, cancelled; `owner_scope` defaults to personal; `principal_amount`,
+  (default), overdue, settled, cancelled; `scope` defaults to empty; `principal_amount`,
   `outstanding_amount`, `minimum_payment` and `interest_rate_percent` cannot be negative (zero is
-  allowed); `currency` defaults to THB (at most 12 characters); `metadata` is a JSON object.
+  allowed); `currency` defaults to THB (ISO 4217); `metadata` is a JSON object.
 - Names are not unique. `account_id` is a plain number, not a foreign key: this service does not
   check that the account exists.
 - Nothing here marks a liability overdue when its `due_date` passes; the caller sets the status

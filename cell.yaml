@@ -1,6 +1,6 @@
 # Liabilities cell: one of the ten finance services split from the retired finance_* tables (2026-10-12).
 # Loans, credit, payables and other money owed (account_id from finance-accounts).
-# Amounts are real (float) like every kit cell; cross-cell ids (account_id, ...) are plain bigints, not foreign keys.
+# Amounts are exact (money = numeric(19,4), decimal = numeric(30,10); SPEC-003); cross-cell ids (account_id, ...) are plain bigints, not foreign keys.
 cell: liabilities
 title: Liabilities
 resources:
@@ -9,7 +9,7 @@ resources:
     plural: liabilities
     filters:
     - liability_type
-    - owner_scope
+    - scope
     - status
     fields:
       name:
@@ -26,33 +26,27 @@ resources:
         - subscription
         - other
         required: true
-      owner_scope:
-        type: enum
-        values:
-        - personal
-        - solo_empire
-        - venture
-        - client
-        - shared
-        default: personal
+      scope:
+        type: text
+        max_length: 64
+        default: ''
       account_id:
         type: bigint
       principal_amount:
-        type: real
+        type: money
         min: 0
       outstanding_amount:
-        type: real
+        type: money
         min: 0
       minimum_payment:
-        type: real
+        type: money
         min: 0
       interest_rate_percent:
-        type: real
+        type: decimal
         min: 0
       currency:
-        type: text
+        type: currency
         default: THB
-        max_length: 12
       due_date:
         type: date
       status:

@@ -24,12 +24,12 @@ def test_list_filters_by_several_statuses_at_once(client, owner):
     assert {item["status"] for item in listed.json()["items"]} == {"overdue", "settled"}
 
 
-def test_list_filters_by_owner_scope(client, owner):
-    create(client, owner, name="Client debt", owner_scope="client")
+def test_list_filters_by_scope(client, owner):
+    create(client, owner, name="Client debt", scope="client")
     create(client, owner, name="Mine")
-    listed = client.get(LIABILITIES, headers=owner, params={"owner_scope": "client"})
+    listed = client.get(LIABILITIES, headers=owner, params={"scope": "client"})
     assert listed.status_code == 200, listed.text
-    assert {item["owner_scope"] for item in listed.json()["items"]} == {"client"}
+    assert {item["scope"] for item in listed.json()["items"]} == {"client"}
 
 
 def test_list_filter_with_an_unknown_status_is_refused(client, owner):
@@ -84,7 +84,7 @@ def test_paying_down_a_liability_bumps_its_version(client, owner):
         json={"outstanding_amount": 750},
     )
     assert paid.status_code == 200, paid.text
-    assert paid.json()["outstanding_amount"] == 750
+    assert paid.json()["outstanding_amount"] == "750.0000"
     assert paid.json()["version"] == 2
 
 
@@ -99,7 +99,7 @@ def test_settling_a_liability_keeps_its_history(client, owner):
     )
     assert settled.status_code == 200, settled.text
     assert settled.json()["status"] == "settled"
-    assert settled.json()["principal_amount"] == 500
+    assert settled.json()["principal_amount"] == "500.0000"
     assert settled.json()["due_date"] == "2026-09-30"
 
 
@@ -131,7 +131,7 @@ def test_a_negative_amount_is_refused_on_update(client, owner):
     path = f"{LIABILITIES}/{liability['id']}"
     refused = client.patch(path, headers=owner, json={"outstanding_amount": -5})
     assert refused.status_code == 422
-    assert client.get(path, headers=owner).json()["outstanding_amount"] == 75
+    assert client.get(path, headers=owner).json()["outstanding_amount"] == "75.0000"
 
 
 def test_a_required_field_cannot_be_cleared(client, owner):

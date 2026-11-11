@@ -7,7 +7,7 @@ def test_new_liability_defaults_to_personal_active_thb(client, owner):
     response = create(client, owner, name="Car loan")
     assert response.status_code == 201, response.text
     liability = response.json()
-    assert liability["owner_scope"] == "personal"
+    assert liability["scope"] == ""
     assert liability["status"] == "active"
     assert liability["currency"] == "THB"
     assert liability["version"] == 1
@@ -37,10 +37,10 @@ def test_amounts_keep_their_decimal_value(client, owner):
         minimum_payment=1999.99,
         interest_rate_percent=6.75,
     ).json()
-    assert liability["principal_amount"] == 100000.5
-    assert liability["outstanding_amount"] == 87500.25
-    assert liability["minimum_payment"] == 1999.99
-    assert liability["interest_rate_percent"] == 6.75
+    assert liability["principal_amount"] == "100000.5000"
+    assert liability["outstanding_amount"] == "87500.2500"
+    assert liability["minimum_payment"] == "1999.9900"
+    assert liability["interest_rate_percent"] == "6.7500000000"
 
 
 def test_account_id_is_a_plain_number_not_a_checked_reference(client, owner):
