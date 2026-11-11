@@ -5,6 +5,8 @@ cell: liabilities
 title: Liabilities
 resources:
   liability:
+    # SPEC-005: reference data only in events (no amounts, names or notes).
+    graph: [liability_type, scope, account_id, currency, due_date, status]
     legacy_columns:
       scope: owner_scope
     table: liabilities
