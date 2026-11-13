@@ -50,6 +50,11 @@ jobs:
           LIABILITIES_KAFKA_CA_PEM: ${{ secrets.LIABILITIES_KAFKA_CA_PEM }}
           LIABILITIES_KAFKA_USERNAME: ${{ secrets.LIABILITIES_KAFKA_USERNAME }}
           LIABILITIES_KAFKA_PASSWORD: ${{ secrets.LIABILITIES_KAFKA_PASSWORD }}
+          # SPEC-002 signed events: the signing seed is a secret; the pinned public keys and the
+          # mode (off/report/enforce) are repository variables. Unset = unsigned, unchecked.
+          LIABILITIES_EVENT_SIGNING_KEY: ${{ secrets.LIABILITIES_EVENT_SIGNING_KEY }}
+          LIABILITIES_EVENT_KEYS: ${{ vars.LIABILITIES_EVENT_KEYS }}
+          LIABILITIES_EVENT_SIGNATURES: ${{ vars.LIABILITIES_EVENT_SIGNATURES }}
         run: |
           set +e
           .venv/bin/liabilities-relay > "$RUNNER_TEMP/relay.json" 2> "$RUNNER_TEMP/relay.err"
